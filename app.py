@@ -22,6 +22,11 @@ def release_vm(id):
 	infra.release_vm(DEFAULT_APP_NAME,id)
 	return jsonify({"status": "success"})
 
+@app.route('/api/v1.0/images', methods=['GET'])
+def get_images():
+	return jsonify({
+		"images": infra.get_images()
+	})
+
 if __name__ == '__main__':
 	app.run(debug=True)
-

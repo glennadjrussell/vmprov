@@ -11,7 +11,7 @@ def get_app_id(app_name):
                 if app['name'].lower() == app_name.lower():
                         app_id = app['id']
                         break
-        return app_id	
+        return app_id
 
 def get_vms_from_app(app_name):
 	result = []
@@ -38,18 +38,27 @@ def get_vms_from_app(app_name):
 
 	return result
 
+def get_vm(app_name, vmid):
+    app_id = get_app_id(app_name)
+    app = client.get_application(app_id)
+    vm = client.get_vm(app_id, vmid)
+    return vm
+
 def acquire_vm(app_name, vmid):
-	app_id = get_app_id(app_name)
-	app = client.get_application(app_id)
-	vm = client.get_vm(app_id, vmid)
-	vm['description'] = 'user=grussell'
-	vm = client.update_vm(app, vm)
-	client.publish_application_updates(app)
+    vm = get_vm(app_name, vmid)
+    vm['description'] = 'user=grussell'
+    vm = client.update_vm(app, vm)
+    client.publish_application_updates(app)
 
 def release_vm(app_name, vmid):
-	app_id = get_app_id(app_name)
-	app = client.get_application(app_id)
-	vm = client.get_vm(app_id, vmid)
-	vm['description'] = ''
-	vm = client.update_vm(app, vm)
-	client.publish_application_updates(app)
+    vm = get_vm(app_name, vmid)
+    vm['description'] = ''
+    vm = client.update_vm(app, vm)
+    client.publish_application_updates(app)
+
+def get_images():
+    images = client.get_images()
+    for image in images:
+        print image
+
+    return images
